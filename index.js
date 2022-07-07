@@ -13,16 +13,16 @@ app.get('/', (req, res) => {
 app.get('/words', (req, res) => {
   axios.get('https://www.hugonobrega.com/palavras.txt')
     .then((response) => {
-      const html = response.data
-      const $ = cheerio.load(html)
-      $('pre', html).each(function () {
-        const word = $(this).text()
-        const length = $(this).text().length
+      const responseData = response.data
+      word = responseData.split('\n')
+      word.forEach(word => {
+        length = word.length
         words.push({
           word,
           length
         })
       })
+
       res.json(words)
     })
 })
