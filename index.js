@@ -5,25 +5,24 @@ const cheerio = require('cheerio')
 
 const app = express()
 
-const words = []
+
 app.get('/', (req, res) => {
   res.json('Bem vindo ao palavras aleatórias API!')
 })
 
 app.get('/words', (req, res) => {
+  const words = []
   axios.get('https://www.hugonobrega.com/palavras.txt')
     .then((response) => {
-      const responseData = response.data
-      word = responseData.split('\n')
-      word.forEach(word => {
+      const allWords = response.data.split('\n')
+      allWords.forEach(word => {
         length = word.length
         words.push({
           word,
           length
         })
       })
-
-      res.json(words)
+      res.json(words.filter(word => word.length == 5 )[Math.floor(Math.random() * 10)])
     })
 })
 app.listen(PORT, () => console.log(`server running on PORT ${PORT}`))
