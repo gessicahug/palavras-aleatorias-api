@@ -4,7 +4,10 @@ const axios = require('axios')
 
 const app = express()
 const url = 'https://www.hugonobrega.com/palavras.txt'
-
+const sampleWords = (arr, num) => {
+  const shuffled = [...arr].sort(() => 0.5 - Math.random());
+  return shuffled.slice(0, num);
+}
 app.get('/', (req, res) => {
   res.json('Bem vindo ao palavras aleatórias API!')
 })
@@ -48,8 +51,9 @@ app.get('/words/:wordLength/:howMany', async (req, res) => {
   const words = []
   axios.get(url)
     .then((response) => {
-      const filteredWords = response.data.split('\n').filter(word => word.length == wordLength).slice(0, howManywords)
-      filteredWords.forEach(word => {
+      const filteredWords = response.data.split('\n').filter(word => word.length == wordLength)
+      const selectedNumberOfWords = sampleWords(filteredWords, howManywords)
+      selectedNumberOfWords.forEach(word => {
         length = word.length
         words.push({
           word,
